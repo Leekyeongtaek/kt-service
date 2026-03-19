@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.11'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+allprojects {
+    group = 'com.lkt'
+    version = '0.0.1'
+    repositories {
+        mavenCentral()
+    }
+}
+
+// 자식 모듈들에만 적용되는 설정
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    dependencies {
+        //공통 의존성 설정
+    }
+
+    ext {
+        set('springCloudVersion', "2025.0.1")
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
+
+// 부모 프로젝트는 빌드 결과물(Jar) 만들지 않는다
+// bootJar: 모든 라이브러리를 포함해 혼자 실행 가능
+bootJar { enabled = false } //이 프로젝트를 실행 가능한 뚱뚱한(Fat) Jar로 만들지 마라
+jar { enabled = true } //이 프로젝트를 다른 프로젝트가 갖다 쓸 수 있는 일반(Plain) Jar로 만들어라

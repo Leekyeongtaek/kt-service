@@ -1,0 +1,4 @@
+rootProject.name = 'kt-service'
+include 'discovery-service'
+include 'gateway-service'
+include 'stock-service'
