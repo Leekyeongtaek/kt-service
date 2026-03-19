@@ -1,5 +1,8 @@
 package com.stockservice.domain;
 
+import com.stockservice.enums.Department;
+import com.stockservice.enums.MarketType;
+import com.stockservice.enums.StockType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,10 +25,13 @@ public class Stock {
     private String korAbbrName;
     private String engName;
     private LocalDate listedDate;
-    private String marketType;
+    @Enumerated(EnumType.STRING)
+    private MarketType marketType;
     private String securitiesType;
-    private String department;
-    private String stockType;
+    @Enumerated(EnumType.STRING)
+    private Department department;
+    @Enumerated(EnumType.STRING)
+    private StockType stockType;
     private int faceValue;
     private long listedShares;
 }
