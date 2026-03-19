@@ -38,3 +38,7 @@ out/
 
 # Querydsl generated sources
 /stock-service/src/main/generated/**
+
+# Properties
+**/src/main/resources/application.*
+**/src/test/resources/application.*
