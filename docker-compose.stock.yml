@@ -1,0 +1,29 @@
+services:
+  stock-blue:
+    build: ./stock-service
+    container_name: stock-blue
+    ports:
+      - "8081:8081"
+    environment:
+      - SERVER_PORT=8081
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/send_box?useSSL=false&allowPublicKeyRetrieval=true
+    networks:
+      - kt-service-net
+  
+  stock-green:
+    build: ./stock-service
+    container_name: stock-green
+    ports:
+      - "8082:8081"
+    environment:
+      - SERVER_PORT=8081
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/send_box?useSSL=false&allowPublicKeyRetrieval=true
+    networks:
+      - kt-service-net
+
+networks:
+  kt-service-net:
+    external: true # 인프라 쪽에서 이미 만든 네트워크를 그대로 사용하겠다는 의미!
+    name: kt-service-net
