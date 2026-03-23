@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 8081
 
 spring:
   application:
@@ -16,6 +16,13 @@ spring:
     hibernate:
       ddl-auto: none
     show_sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
 eureka:
   client:
     register-with-eureka: true
