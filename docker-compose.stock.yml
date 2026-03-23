@@ -1,6 +1,8 @@
 services:
   stock-blue:
-    build: ./stock-service
+    #build: ./stock-service
+    # IMAGE_TAG 환경 변수가 있으면 그 값을 쓰고, 없으면 latest 사용
+    image: stock-service:${IMAGE_TAG:-latest}
     container_name: stock-blue
     ports:
       - "8081:8081"
@@ -12,7 +14,8 @@ services:
       - kt-service-net
   
   stock-green:
-    build: ./stock-service
+    #build: ./stock-service
+    image: stock-service:${IMAGE_TAG:-latest}
     container_name: stock-green
     ports:
       - "8082:8081"
