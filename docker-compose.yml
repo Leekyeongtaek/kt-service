@@ -1,5 +1,4 @@
 services:
-
 # 1. Discovery-Service
   discovery-service:
     build: ./discovery-service
@@ -22,17 +21,7 @@ services:
     networks:
       - kt-service-net
 
-# 3. Stock-Service
-  stock-service:
-    build: ./stock-service
-    container_name: stock-service
-    depends_on:
-      - discovery-service
-    environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
-    networks:
-      - kt-service-net
-
 networks:
   kt-service-net:
+    name: kt-service-net
     driver: bridge # 기본값
