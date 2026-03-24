@@ -1,6 +1,9 @@
 package com.stockservice.service;
 
+import com.stockservice.domain.Stock;
+import com.stockservice.dto.StockDetailResponse;
 import com.stockservice.dto.StockResponse;
+import com.stockservice.repository.StockRepository;
 import com.stockservice.repository.query.StockQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +16,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class StockService {
 
+    private final StockRepository stockRepository;
     private final StockQueryRepository stockQueryRepository;
 
     public Page<StockResponse> searchStock(Pageable pageable) {
         return stockQueryRepository.searchStock(pageable);
+    }
+
+    public StockDetailResponse getStockDetail(Long stockId) {
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(IllegalArgumentException::new);
+        return new StockDetailResponse(stock);
     }
 }
