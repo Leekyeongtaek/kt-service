@@ -9,6 +9,10 @@ spring:
     url: jdbc:mysql://localhost:3306/send_box?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root1234
+  data:
+    redis:
+      host: localhost
+      port: 6380
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
