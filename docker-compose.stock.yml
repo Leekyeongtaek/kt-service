@@ -10,6 +10,7 @@ services:
       - SERVER_PORT=8081
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/send_box?useSSL=false&allowPublicKeyRetrieval=true
+      - DATA_REDIS_HOST=stock-redis
     networks:
       - kt-service-net
   
@@ -23,6 +24,18 @@ services:
       - SERVER_PORT=8081
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/send_box?useSSL=false&allowPublicKeyRetrieval=true
+      - DATA_REDIS_HOST=stock-redis
+    networks:
+      - kt-service-net
+
+  stock-redis:
+    image: redis
+    container_name: stock-redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - stock-redis-data:/data
+    command: redis-server --appendonly yes
     networks:
       - kt-service-net
 
@@ -30,3 +43,6 @@ networks:
   kt-service-net:
     external: true # 인프라 쪽에서 이미 만든 네트워크를 그대로 사용하겠다는 의미!
     name: kt-service-net
+
+volumes:
+  stock-redis-data:
