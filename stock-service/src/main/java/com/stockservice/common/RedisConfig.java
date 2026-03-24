@@ -16,10 +16,10 @@ public class RedisConfig {
     //Jedis (전통적인 강자), 동기(Blocking) 방식
     //스레드 안전하지 않음 (풀링 필요), 상대적으로 무거움 (멀티스레드 시)
     //application.yml에 설정한 값을 자동으로 읽어와 연결
-    @Bean
-    public JedisConnectionFactory jedisConnectionFactory() {
-        return new JedisConnectionFactory();
-    }
+//    @Bean
+//    public JedisConnectionFactory jedisConnectionFactory() {
+//        return new JedisConnectionFactory();
+//    }
 
     //Lettuce (신흥 강자, 스프링 기본값), 비동기(Non-blocking) / 리액티브 방식
     //스레드 안전함 (커넥션 공유 가능), 효율적이고 빠름 (Netty 기반)
