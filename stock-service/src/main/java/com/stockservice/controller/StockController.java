@@ -33,7 +33,6 @@ public class StockController {
         return ResponseEntity.ok(stockService.getStockDetail(stockId));
     }
 
-
     @GetMapping("/version")
     public ResponseEntity<String> checkAppVersion() {
         final String appVersion = "현재 앱 버전: 1.0.1v";
