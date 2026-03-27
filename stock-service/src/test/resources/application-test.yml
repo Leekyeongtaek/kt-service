@@ -1,16 +1,37 @@
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    # MODE=MySQL 옵션을 주면 H2가 MySQL의 SQL 문법을 이해하고 흉내 냅니다.
     url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1
     username: sa
     password:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop # 테스트가 켜질 때 Entity를 보고 테이블을 만들고, 꺼질 때 삭제함
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
         format_sql: true
     generate-ddl: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6380
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
