@@ -1,22 +1,22 @@
 spring:
   application:
-    name: gateway-service # ???? ??? ??
+    name: gateway-service
   cloud:
     gateway:
       server:
         webflux:
           routes:
-            - id: stock-service # ??? ??? (???? ??)
-              uri: lb://STOCK-SERVICE # lb(Load Balancer)? ?? ???? ??? ???? ??
+            - id: stock-service
+              uri: lb://STOCK-SERVICE
               predicates:
-                - Path=/stocks/** # http://localhost:8000/stock/... ?? ?? ??? ???
-#              filters:
-#                - StripPrefix=1 # ???? ? ?? ???(/stocks)? ?? ??
+                - Path=/stock-service/**
+              filters:
+                - StripPrefix=1
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/ # ??? ?? ??
+      defaultZone: http://localhost:8761/eureka/
 server:
   port: 8000
