@@ -1,4 +1,4 @@
-package com.stockservice.common;
+package com.stockservice.common.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
