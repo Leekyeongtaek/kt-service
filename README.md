@@ -15,6 +15,10 @@
 * 테스트: JUnit5
 
 ## 3. 시스템 아키텍처
+- 서버 노트북
+ - MacBook Pro 13 M2칩
+ - CPU 8코어
+ - 램 16GB
 ![System Architecture](./images/my-image3.svg)
 
 ## 4. 주요 기능
