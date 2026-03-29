@@ -15,7 +15,7 @@
 * 테스트: JUnit5
 
 ## 3. 시스템 아키텍처
-Draw.io 그림 첨부 (마지막)
+![System Architecture](./images/my-image.png)
 
 ## 4. 주요 기능
 
