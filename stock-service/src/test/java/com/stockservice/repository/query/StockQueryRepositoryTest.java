@@ -15,7 +15,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("test")
 @Sql(scripts = "/stock-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class StockQueryRepositoryTest {
 

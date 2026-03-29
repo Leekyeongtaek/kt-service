@@ -1,9 +1,14 @@
 package com.stockservice.service;
 
 import com.stockservice.domain.Stock;
+import com.stockservice.domain.StockLimitedOfferPurchase;
 import com.stockservice.dto.StockDetailResponse;
 import com.stockservice.dto.StockRankingResponse;
+import com.stockservice.dto.message.LimitedOfferPurchaseEvent;
+import com.stockservice.dto.request.StockLimitedOfferPurchaseRequest;
+import com.stockservice.enums.LimitedOfferResult;
 import com.stockservice.fixture.StockFixture;
+import com.stockservice.messaging.StockProducer;
 import com.stockservice.repository.StockRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,22 +23,26 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class StockServiceTest {
 
-    // 가짜 객체 생성
+    @InjectMocks
+    private StockService stockService;
+
     @Mock
     private StockRepository stockRepository;
 
     @Mock
-    private StockRankingService stockRankingService;
+    private StockRedisService stockRedisService;
 
-    // 가짜 객체들을 주입받을 진짜 테스트 대상 생성
-    @InjectMocks
-    private StockService stockService;
+    @Mock
+    private StockProducer stockProducer;
 
     @Test
     @DisplayName("유효한 종목 ID로 상세 조회 시, 종목 정보를 정상적으로 반환한다.")
@@ -74,7 +83,7 @@ class StockServiceTest {
     void getTop10Rankings_Order_Guaranteed() {
         //given
         List<Long> top10Ids = List.of(3L, 1L, 2L);
-        given(stockRankingService.getTop10Ids()).willReturn(top10Ids);
+        given(stockRedisService.getTop10Ids()).willReturn(top10Ids);
 
         Stock stock1 = StockFixture.createStockWithId(1L, "종목1");
         Stock stock2 = StockFixture.createStockWithId(2L, "종목2");
@@ -100,12 +109,54 @@ class StockServiceTest {
     @DisplayName("Top10 종목 조회 시, 레디스에 종목 랭킹 데이터가 없으면 빈 리스트를 반환한다")
     void getTop10Rankings_Empty() {
         //given
-        given(stockRankingService.getTop10Ids()).willReturn(Collections.emptyList());
+        given(stockRedisService.getTop10Ids()).willReturn(Collections.emptyList());
 
         //when
         List<StockRankingResponse> result = stockService.getTop10Rankings();
 
         //then
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    @DisplayName("주식 한정 상품 매수에 성공하면, 카프카 메시지를 정상 발행한다.")
+    void applyLimitedOffer_Success() {
+        //given
+        Long stockId = 1L;
+        Long stockLimitedOfferId = 2L;
+        Long userId = 10L;
+        StockLimitedOfferPurchaseRequest request = new StockLimitedOfferPurchaseRequest(stockLimitedOfferId, userId);
+
+        given(stockRedisService.tryPurchaseLimitedOffer(stockId, userId))
+                .willReturn(LimitedOfferResult.SUCCESS);
+
+        //when
+        LimitedOfferResult result = stockService.applyLimitedOffer(stockId, request);
+
+        //then
+        assertThat(result).isEqualTo(LimitedOfferResult.SUCCESS);
+
+        verify(stockProducer).send(any(LimitedOfferPurchaseEvent.class));
+    }
+
+    @Test
+    @DisplayName("주식 한정 상품 매수에 실패하면, 카프카 메시지를 발행하지 않는다.")
+    void applyLimitedOffer_Fail_DoesNotPublishEvent() {
+        //given
+        Long stockId = 1L;
+        Long stockLimitedOfferId = 2L;
+        Long userId = 10L;
+        StockLimitedOfferPurchaseRequest request = new StockLimitedOfferPurchaseRequest(stockLimitedOfferId, userId);
+
+        given(stockRedisService.tryPurchaseLimitedOffer(stockId, userId))
+                .willReturn(LimitedOfferResult.SOLD_OUT);
+
+        //when
+        LimitedOfferResult result = stockService.applyLimitedOffer(stockId, request);
+
+        //then
+        assertThat(result).isEqualTo(LimitedOfferResult.SOLD_OUT);
+
+        verify(stockProducer, never()).send(any(LimitedOfferPurchaseEvent.class));
     }
 }
