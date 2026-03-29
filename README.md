@@ -15,7 +15,7 @@
 * 테스트: JUnit5
 
 ## 3. 시스템 아키텍처
-![System Architecture](./images/my-image3.png)
+![System Architecture](./images/my-image3.svg)
 
 ## 4. 주요 기능
 
