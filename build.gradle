@@ -4,11 +4,12 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
+// 모든 프로젝트(Root 포함)에 적용되는 공통 설정
 allprojects {
     group = 'com.lkt'
     version = '0.0.1'
     repositories {
-        mavenCentral()
+        mavenCentral() // 라이브러리 다운로드 저장소
     }
 }
 
@@ -24,6 +25,13 @@ subprojects {
         }
     }
 
+    //implementation: 코드 작성, 런타임 시 모두 필요
+    //compileOnly: 코드 작성, 빌드 시 필요
+    //runtimeOnly: 런타임 시 필요
+    //annotationProcessor: 빌드 과정에서 애노테이션을 읽어 코드 자동 생성 (Ex: 롬복)
+    //testImplementation: 테스트 코드 작성, 런타임 모두 필요
+    //testCompileOnly: 테스트 코드 빌드 시만 필요
+    //testRuntimeOnly: 테스트 런타임 시 필요
     dependencies {
         //공통 의존성 설정
         testRuntimeOnly 'com.h2database:h2'
@@ -32,11 +40,13 @@ subprojects {
     }
 
     ext {
+        // Spring Cloud 버전을 변수로 지정 (편의성, 통일성)
         set('springCloudVersion', "2025.0.1")
     }
 
+    // Gradle 테스트 코드 실행 시 어떤 엔진(도구)을 사용할지 지시
     tasks.named('test') {
-        useJUnitPlatform()
+        useJUnitPlatform() // JUnit 5 사용
     }
 }
 
