@@ -32,6 +32,9 @@ spring:
     consumer:
       # 컨슈머가 처음 커졌을 때(혹은 이전 읽은 기록이 없을 때)
       # 카프카에 쌓인 메시지를 가장 옛날 것(earliest)부터 읽어올지, 최신 것(latest)부터 읽을지 여부
+      # 이 설정은 읽은 기록(Offset)이 없는 신규 컨슈머 그룹만 적용
+      # earliest: 단톡방에 초대 될 때, 가장 처음 메시지부터 읽기, 카프카에 메시지가 많이 쌓여 있으면 엄청난 데이터를 처리하게 됨
+      # latest: 단톡방에 초대 될 때, 초대 시점부터 메시지 읽기, 카프카에 쌓여 있는 메시지를 읽지 않음
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
