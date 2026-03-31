@@ -30,6 +30,8 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer # 키는 문자열로 변환
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer # 데이터(값)는 JSON으로 변환
     consumer:
+      # 컨슈머가 처음 커졌을 때(혹은 이전 읽은 기록이 없을 때)
+      # 카프카에 쌓인 메시지를 가장 옛날 것(earliest)부터 읽어올지, 최신 것(latest)부터 읽을지 여부
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
