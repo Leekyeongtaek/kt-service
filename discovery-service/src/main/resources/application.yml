@@ -1,6 +1,7 @@
+# 유레카 서버: 전화번호부
 spring:
   application:
-    name: eureka-server
+    name: eureka-server # 서비스 고유 이름
 
 server:
   port: 8761
