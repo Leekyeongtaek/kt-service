@@ -1,22 +1,30 @@
+# 문지기
 spring:
   application:
-    name: gateway-service
+    name: gateway-service # 서비스 고유 이름
   cloud:
     gateway:
       server:
         webflux:
-          routes:
-            - id: stock-service
+          routes: # 길 안내(라우팅) 규칙 설정
+            - id: stock-service # 규칙의 고유 ID (자유롭게 짓기)
+              # uri: 어디로 보낼지 여부
+              # lb:// Load Balancer 약자
+              # 유레카 전화번호부에서 STOCK-SERVICE 이름을 찾아 해당 주소로 보냄
               uri: lb://STOCK-SERVICE
               predicates:
+                  # 사용자가 요청한 uri에 /stock-service/로 시작한다면 이 규칙을 적용
                 - Path=/stock-service/**
               filters:
+                  # 해당 서비스로 보내기 전에 '/' 기준으로 앞에 한 덩이를 잘라냄
+                  # /stock-service/stocks -> /stocks
                 - StripPrefix=1
 eureka:
   client:
-    register-with-eureka: true
-    fetch-registry: true
+    register-with-eureka: true # 내 주소를 유레카 전화번호부에 등록
+    fetch-registry: true # 유레카로부터 전화번호부 정보 가져옴
     service-url:
+      # 유레카 서버 주소
       defaultZone: http://localhost:8761/eureka/
 server:
   port: 8000
