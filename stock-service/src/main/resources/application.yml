@@ -3,27 +3,39 @@ server:
 
 spring:
   application:
-    name: stock-service
+    name: stock-service # 유레카 전화번호부에 등록될 서비스 이름
+
+  # MySQL 데이터베이스 설정
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/send_box?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root1234
+
+  # Redis 설정
   data:
     redis:
       host: localhost
       port: 6380
+
+  # Kafka 설정
+  # 카프카는 데이터를 바이트(Byte) 덩어리로만 이해한다
+  # 그래서 자바 객체(JSON)를 바이트로 변환하거나 역변환하는 과정이 필수
   kafka:
     bootstrap-servers: localhost:9092
     producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer # 키는 문자열로 변환
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer # 데이터(값)는 JSON으로 변환
     consumer:
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
+        # JOSN 데이터를 자바 객체로 역변환할 때, 보안상 아무 클래스나 변환하지 못하게 막아둠
+        # "*" 옵션은 모든 패키지의 클래스를 믿고 변환해도 좋다는 의미
         spring.json.trusted.packages: "*"
+
+  # ORM 설정
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -32,15 +44,18 @@ spring:
       ddl-auto: none
     show_sql: true
 
+# 액추에이터(모니터링) 설정
 management:
   endpoints:
     web:
       exposure:
+        # 이 서비스에 대한 헬스 정보를 외부에서 확인 가능하도록 /actuator/health 주소 개방
         include: health
 
+# 유레카 클라이언트 설정
 eureka:
   client:
-    register-with-eureka: true
-    fetch-registry: true
+    register-with-eureka: true # 내 주소를 유레카 전화번호부에 등록
+    fetch-registry: true # 다른 서비스와 통신에 필요한 전화번호부 정보 받아오기
     service-url:
       defaultZone: http://localhost:8761/eureka/
