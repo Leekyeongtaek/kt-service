@@ -7,7 +7,10 @@ spring:
 
   # MySQL 데이터베이스 설정
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    # jdbc:mysql:// : JDBC 방식으로 MySQL 접속하겠다는 프로토콜
+    # send_box: 스키마 이름
+    # useSSL: 데이터베이스와 통신할 때 SSL(보안 암호화 통신) 사용 여부, 실제 운영 서버에서는 해킹 방지를 위해 켜야함
+    # allowPublicKeyRetrieval: useSSL 옵션을 켜지 않은 상태에서 강제로 키를 가져오는 설정
     url: jdbc:mysql://localhost:3306/send_box?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root1234
