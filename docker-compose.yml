@@ -1,74 +1,76 @@
 services:
-# 1. Discovery-Service
   discovery-service:
-    build: ./discovery-service
+    image: discovery-service:latest
     container_name: discovery-service
     ports:
       - "8761:8761"
     networks:
-      - kt-service-net
+      - mr-lee-msa
 
-# 2. Gateway-Service
   gateway-service:
-    build: ./gateway-service
+    image: gateway-service:latest
     container_name: gateway-service
-    ports:
-      - "8000:8000"
     depends_on:
       - discovery-service
+    ports:
+      - "8000:8000"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
     networks:
-      - kt-service-net
+      - mr-lee-msa
 
-# 3. Zookeeper (Kafka 실행을 위한 필수 코디네이터)
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.0 # M1/M2 완벽 지원
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    networks:
-      - kt-service-net
-
-# 4. Kafka (Confluent 공식 브로커)
-  kafka-service:
-    image: confluentinc/cp-kafka:7.5.0
-    container_name: kafka-service
+  stock-service:
+    image: stock-service:latest
+    container_name: stock-service
     depends_on:
-      - zookeeper
+      - discovery-service
+      - gateway-service
+      - redis
+      - kafka
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/send_box?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    networks:
+      - mr-lee-msa
+
+  redis:
+    image: redis
+    container_name: kt-redis
+    ports:
+      - "6380:6379"
+    networks:
+      - mr-lee-msa
+
+  kafka: # 서비스 이름
+    image: apache/kafka:latest
+    container_name: apache-kafka
+    # [볼륨 이름]:[컨테이너 내부 경로]
+    volumes:
+      # - kafka-data:/var/lib/kafka/data
+      - kafka-data:/tmp/kafka-logs
     ports:
       - "9092:9092"
+      - "9094:9094"
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      # 내부 도커망에서는 29092, 호스트(맥북)에서는 9092 사용
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-service:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      - KAFKA_NODE_ID=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      # [핵심] 리스너를 내부(9092), 외부(9094), 컨트롤러(9093) 3개로 분리
+      - KAFKA_LISTENERS=INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:9094,CONTROLLER://0.0.0.0:9093
+      # [핵심] 도커 내부 애들한테는 'kafka:9092'로 오라고 하고, 인텔리제이한테는 'localhost:9094'로 오라고 명함(광고)을 다르게 파줍니다.
+      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:9092,EXTERNAL://localhost:9094
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - CLUSTER_ID=L_bJ6M3_Rhi25mZ1r0t9Mw
     networks:
-      - kt-service-net 
-
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui
-    ports:
-      - "9093:8080"
-    depends_on:
-      - kafka-service
-    environment:
-      - KAFKA_CLUSTERS_0_NAME=local-confluent-kafka
-      # 내부 네트워크망 주소와 포트(29092)를 사용
-      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-service:29092
-      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
-      - DYNAMIC_CONFIG_ENABLED=true
-    networks:
-      - kt-service-net
-
+      - mr-lee-msa
 networks:
-  kt-service-net:
-    name: kt-service-net
-    driver: bridge # 기본값
+  mr-lee-msa:
+    # Specify driver options
+    driver: bridge
+
+volumes:
+  kafka-data:
