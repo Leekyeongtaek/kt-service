@@ -59,7 +59,7 @@ public class StockController {
 
     @GetMapping("/version")
     public ResponseEntity<String> checkAppVersion() {
-        final String appVersion = "현재 앱 버전: 1.0.1v";
+        final String appVersion = "현재 앱 버전: 1.0.2v";
         return new ResponseEntity<>(appVersion, HttpStatus.OK);
     }
 }
