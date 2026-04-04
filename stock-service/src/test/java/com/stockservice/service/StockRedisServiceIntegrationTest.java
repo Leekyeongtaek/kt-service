@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,20 +27,22 @@ public class StockRedisServiceIntegrationTest {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    final Long TEST_STOCK_ID = 999L;
-    private final String STOCK_KEY = "stock:limited-offer:" + TEST_STOCK_ID;
-    private final String USER_KEY = "stock:limited-offer:users:" + TEST_STOCK_ID;
+    private Long testStockId;
+    private String stockKey;
+    private String userKey;
 
     @BeforeEach
     void setUp() {
-        redisTemplate.delete(STOCK_KEY);
-        redisTemplate.delete(USER_KEY);
+        testStockId = System.nanoTime();
+        stockKey = "stock:limited-offer:" + testStockId;
+        userKey = "stock:limited-offer:users:" + testStockId;
+
+        redisTemplate.delete(List.of(stockKey, userKey));
     }
 
     @AfterEach
     void tearDown() {
-        redisTemplate.delete(STOCK_KEY);
-        redisTemplate.delete(USER_KEY);
+        redisTemplate.delete(List.of(stockKey, userKey));
     }
 
     @Test
@@ -53,7 +56,7 @@ public class StockRedisServiceIntegrationTest {
         AtomicInteger duplicateCount = new AtomicInteger(0);
 
         //999 번 종목으로 100개 수량 설정
-        stockRedisService.setUpLimitedOffer(TEST_STOCK_ID, quantity);
+        stockRedisService.setUpLimitedOffer(testStockId, quantity);
 
         // 32개의 스레드로 1000개 요청 수행
         ExecutorService executorService = Executors.newFixedThreadPool(32);
@@ -65,7 +68,7 @@ public class StockRedisServiceIntegrationTest {
 
             executorService.submit(() -> {
                 try {
-                    LimitedOfferResult result = stockRedisService.tryPurchaseLimitedOffer(TEST_STOCK_ID, userId);
+                    LimitedOfferResult result = stockRedisService.tryPurchaseLimitedOffer(testStockId, userId);
 
                     switch (result) {
                         case SUCCESS -> successCount.incrementAndGet();
@@ -87,7 +90,7 @@ public class StockRedisServiceIntegrationTest {
         assertThat(successCount.get()).isEqualTo(quantity); //성공한 유저수는 설정한 재고 수와 같아야 한다
         assertThat(failCount.get()).isEqualTo(requestCount - quantity); //실패한 유저수는 총 요청 횟수 - 재고 수
 
-        Object remainStock = redisTemplate.opsForValue().get(STOCK_KEY);
+        Object remainStock = redisTemplate.opsForValue().get(stockKey);
         assertThat(String.valueOf(remainStock)).isEqualTo("0"); //한정 상품 잔여 수량은 0개
     }
 
@@ -104,13 +107,13 @@ public class StockRedisServiceIntegrationTest {
         ExecutorService executorService = Executors.newFixedThreadPool(duplicateRequestCount);
         CountDownLatch latch = new CountDownLatch(duplicateRequestCount);
 
-        stockRedisService.setUpLimitedOffer(TEST_STOCK_ID, quantity);
+        stockRedisService.setUpLimitedOffer(testStockId, quantity);
 
         //when
         for (int i = 0; i < duplicateRequestCount; i++) {
             executorService.submit(() -> {
                 try {
-                    LimitedOfferResult result = stockRedisService.tryPurchaseLimitedOffer(TEST_STOCK_ID, userId);
+                    LimitedOfferResult result = stockRedisService.tryPurchaseLimitedOffer(testStockId, userId);
                     switch (result) {
                         case SUCCESS -> successCount.incrementAndGet();
                         case DUPLICATE -> duplicateCount.incrementAndGet();
