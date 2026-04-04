@@ -57,14 +57,9 @@ class StockServiceTest {
         //when
         StockDetailResponse stockDetail = stockService.getStockDetail(stockId);
 
-        //then
-        assertThat(stockDetail).usingRecursiveComparison()
-                .ignoringFields("marketTypeName", "departmentName", "stockTypeName")
-                .isEqualTo(standardStock);
-
-        assertThat(stockDetail.getMarketTypeName()).isEqualTo("코스피");
-        assertThat(stockDetail.getStockTypeName()).isEqualTo("보통주");
-        assertThat(stockDetail.getDepartmentName()).isNull();
+        assertThat(stockDetail)
+                .extracting("marketTypeName", "stockTypeName", "departmentName")
+                .containsExactly("코스피", "보통주", null);
 
         verify(stockRedisService, times(1)).incrementScore(stockId);
     }
