@@ -27,8 +27,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class StockServiceTest {
@@ -48,7 +47,7 @@ class StockServiceTest {
     private StockLimitedOfferPurchaseRepository stockLimitedOfferPurchaseRepository;
 
     @Test
-    @DisplayName("유효한 종목 ID로 상세 조회 시, 종목 정보를 정상적으로 반환한다.")
+    @DisplayName("유효한 종목 ID로 상세 조회 시, 종목 정보를 정상적으로 반환하고 조회수를 1 증가시킨다.")
     void getStockDetail_Success() {
         //given
         Long stockId = 1L;
@@ -67,6 +66,8 @@ class StockServiceTest {
         assertThat(stockDetail.getMarketTypeName()).isEqualTo("코스피");
         assertThat(stockDetail.getStockTypeName()).isEqualTo("보통주");
         assertThat(stockDetail.getDepartmentName()).isNull();
+
+        verify(stockRedisService, times(1)).incrementScore(stockId);
     }
 
     @Test
