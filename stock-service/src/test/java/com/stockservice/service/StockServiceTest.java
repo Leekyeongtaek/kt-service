@@ -22,8 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -99,14 +98,14 @@ class StockServiceTest {
         List<StockRankingResponse> result = stockService.getTop10Rankings();
 
         //then
-        assertThat(result.get(0).getStockId()).isEqualTo(3L);
-        assertThat(result.get(0).getRank()).isEqualTo(1);
-
-        assertThat(result.get(1).getStockId()).isEqualTo(1L);
-        assertThat(result.get(1).getRank()).isEqualTo(2);
-
-        assertThat(result.get(2).getStockId()).isEqualTo(2L);
-        assertThat(result.get(2).getRank()).isEqualTo(3);
+        assertThat(result)
+                .hasSize(3)
+                .extracting("stockId", "rank")
+                .containsExactly(
+                        tuple(3L, 1),
+                        tuple(1L, 2),
+                        tuple(2L, 3)
+                );
     }
 
     @Test
