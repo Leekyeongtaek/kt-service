@@ -9,6 +9,8 @@ import com.stockservice.service.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +25,8 @@ public class StockController {
     private final StockService stockService;
 
     @GetMapping("/search")
-    public ResponseEntity<Page<StockResponse>> getStocks(Pageable pageable) {
+    public ResponseEntity<Page<StockResponse>> getStocks(
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<StockResponse> stockResponses = stockService.searchStock(pageable);
         return new ResponseEntity<>(stockResponses, HttpStatus.OK);
     }

@@ -1,23 +1,22 @@
 DELETE FROM stock;
 
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (1, 'KR7098120009', '98120', '(주)마이크로컨텍솔루션', '마이크로컨텍솔', 'Micro Contact Solution Co.,Ltd.', '2008-09-23', 'KOSDAQ', '주권', 'MID_TIER', 'COMMON', 500, 8312766);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (2, 'KR7009520008', '9520', '(주)포스코엠텍', '포스코엠텍', 'POSCO M-TECH CO.,LTD.', '1997-11-10', 'KOSDAQ_GLOBAL', '주권', 'BLUE_CHIP', 'COMMON', 500, 41642703);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (3, 'KR7095570008', '95570', 'AJ네트웍스보통주', 'AJ네트웍스', 'AJ Networks Co.,Ltd.', '2015-08-21', 'KOSPI', '주권', null, 'COMMON', 1000, 45252759);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (4, 'KR7006840003', '6840', 'AK홀딩스보통주', 'AK홀딩스', 'AK Holdings, Inc.', '1999-08-11', 'KOSPI', '주권', null, 'COMMON', 5000, 13247561);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (5, 'KR7282330000', '282330', 'BGF리테일보통주', 'BGF리테일', 'BGF Retail', '2017-12-08', 'KOSPI', '주권', null, 'COMMON', 1000, 17283906);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (6, 'KR7027410000', '27410', 'BGF보통주', 'BGF', 'BGF', '2014-05-19', 'KOSPI', '주권', null, 'COMMON', 1000, 95716791);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (7, 'KR7138930003', '138930', 'BNK금융지주보통주', 'BNK금융지주', 'BNK Financial Group Inc.', '2011-03-30', 'KOSPI', '주권', null, 'COMMON', 5000, 310327033);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (8, 'KR7001461003', '1465', 'BYC1우선주', 'BYC우', 'BYC(1P)', '1989-09-05', 'KOSPI', '주권', null, 'OLD_PREFERRED', 500, 2153850);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (9, 'KR7001460005', '1460', 'BYC보통주', 'BYC', 'BYC', '1975-06-02', 'KOSPI', '주권', null, 'COMMON', 500, 6246150);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (10, 'KR7001041003', '1045', 'CJ1우선주', 'CJ우', 'CJ(1P)', '1989-08-18', 'KOSPI', '주권', null, 'OLD_PREFERRED', 5000, 2260223);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (11, 'KR700104K010', '00104K', 'CJ4우선주(전환)', 'CJ4우(전환)', 'CJ(4PC)', '2019-08-09', 'KOSPI', '주권', null, 'NEW_PREFERRED', 5000, 4226512);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (12, 'KR7001040005', '1040', 'CJ보통주', 'CJ', 'CJ Corp.', '1973-06-29', 'KOSPI', '주권', null, 'COMMON', 5000, 29176998);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (13, 'KR7011151008', '11155', 'CJ씨푸드1우선주', 'CJ씨푸드1우', 'CJSEAFOODCORPORATION(1P)', '1990-01-13', 'KOSPI', '주권', null, 'OLD_PREFERRED', 500, 200000);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (14, 'KR7011150000', '11150', 'CJ씨푸드보통주', 'CJ씨푸드', 'CJSEAFOODCORPORATION', '1988-11-26', 'KOSPI', '주권', null, 'COMMON', 500, 35930773);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (15, 'KR7058820002', '58820', 'CMG제약', 'CMG제약', 'CMG Pharmaceutical Co., Ltd.', '2001-08-31', 'KOSDAQ', '주권', 'MID_TIER', 'COMMON', 500, 147842183);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (16, 'KR7000590000', '590', 'CS홀딩스보통주', 'CS홀딩스', 'CSHOLDINGS', '1975-12-22', 'KOSPI', '주권', null, 'COMMON', 5000, 1154482);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (17, 'KR7012030003', '12030', 'DB Inc.보통주', 'DB', 'DB Inc.', '1993-01-06', 'KOSPI', '주권', null, 'COMMON', 500, 201173933);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (18, 'KR7005830005', '5830', 'DB손해보험보통주', 'DB손해보험', 'DB INSURANCE', '1973-06-28', 'KOSPI', '주권', null, 'COMMON', 500, 69384000);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (19, 'KR7016610008', '16610', 'DB증권보통주', 'DB증권', 'DB Securities', '1988-06-27', 'KOSPI', '주권', null, 'COMMON', 5000, 42446389);
-INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES (20, 'KR7000990002', '990', 'DB하이텍보통주', 'DB하이텍', 'DB HiTek Co.,LTD', '1975-12-12', 'KOSPI', '주권', null, 'COMMON', 5000, 43504588);
+INSERT INTO stock (stock_id, standard_code, short_code, kor_name, kor_abbr_name, eng_name, listed_date, market_type, securities_type, department, stock_type, face_value, listed_shares) VALUES
+-- [상장일] 최소(1956년): 경방 / 최대(2026년): 덕양에너젠
+(1, 'KR7000050005', '000050', '경방보통주', '경방', 'Kyungbang', '1956-03-03', 'KOSPI', '주권', NULL, 'COMMON', 500, 27415270),
+(2, 'KR70001A0001', '0001A0', '덕양에너젠', '덕양에너젠', 'DEOKYANG ENERGEN', '2026-01-30', 'KOSDAQ', '주권', 'MID_TIER', 'COMMON', 500, 24791195),
 
+-- [상장주식수] 최소(20만): CJ씨푸드1우 / 최대(59억): 삼성전자
+(3, 'KR7011151008', '011155', 'CJ씨푸드1우선주', 'CJ씨푸드1우', 'CJSEAFOOD(1P)', '1990-01-13', 'KOSPI', '주권', NULL, 'NEW_PREFERRED', 500, 200000),
+(4, 'KR7005930003', '005930', '삼성전자보통주', '삼성전자', 'SamsungElectronics', '1975-06-11', 'KOSPI', '주권', NULL, 'COMMON', 100, 5919637922),
+
+-- [단축코드] 최소(000020): 동화약품 / 최대(950250): 테라뷰
+(5, 'KR7000020008', '000020', '동화약품보통주', '동화약품', 'DongwhaPharm', '1976-03-24', 'KOSPI', '주권', NULL, 'COMMON', 1000, 27931470),
+(6, 'KR8826050005', '950250', '테라뷰홀딩스', '테라뷰', 'TERAVIEW HOLDINGS', '2025-12-09', 'KOSDAQ', '주식예탁증권', 'BLUE_CHIP', 'COMMON', 0, 35517731),
+
+-- [한글 종목약명] 최소(숫자 시작): 3S / 최대(ㅎ 시작): 힘스
+(7, 'KR7060310000', '060310', '삼에스코리아', '3S', '3S KOREA', '2002-04-23', 'KOSDAQ', '주권', 'MID_TIER', 'COMMON', 500, 53059040),
+(8, 'KR7238490007', '238490', '힘스', '힘스', 'HIMS CO., LTD.', '2017-07-20', 'KOSDAQ', '주권', 'BLUE_CHIP', 'COMMON', 500, 11312236),
+
+-- [기타] 데이터 다양성을 위한 중간값 샘플
+(9, 'KR7250030004', '250030', '진코스텍', '진코스텍', 'JINCOSTECH', '2019-11-29', 'KONEX', '주권', 'MID_TIER', 'COMMON', 500, 2589337),
+(10, 'KR7270660004', '270660', '에브리봇 주식회사', '에브리봇', 'EVERYBOT Inc.', '2021-07-28', 'KOSDAQ', '주권', 'MID_TIER', 'COMMON', 500, 12690583);

@@ -1,9 +1,12 @@
 package com.stockservice.repository.query;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.stockservice.domain.Stock;
 import com.stockservice.dto.QStockResponse;
 import com.stockservice.dto.StockResponse;
+import com.stockservice.repository.util.QuerydslUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -23,10 +26,12 @@ public class StockQueryRepository {
     }
 
     public Page<StockResponse> searchStock(Pageable pageable) {
+        OrderSpecifier<?>[] orderSpecifiers = QuerydslUtil.getOrderSpecifiers(pageable, Stock.class, "stock");
+
         List<StockResponse> stocks = queryFactory
                 .select(new QStockResponse(stock))
                 .from(stock)
-                .orderBy(stock.id.desc())
+                .orderBy(orderSpecifiers)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

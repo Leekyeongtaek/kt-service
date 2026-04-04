@@ -25,7 +25,7 @@ spring:
   # 카프카는 데이터를 바이트(Byte) 덩어리로만 이해한다
   # 그래서 자바 객체(JSON)를 바이트로 변환하거나 역변환하는 과정이 필수
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:9094
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer # 키는 문자열로 변환
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer # 데이터(값)는 JSON으로 변환
