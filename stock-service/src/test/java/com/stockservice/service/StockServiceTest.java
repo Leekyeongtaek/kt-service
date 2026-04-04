@@ -1,7 +1,6 @@
 package com.stockservice.service;
 
 import com.stockservice.domain.Stock;
-import com.stockservice.domain.StockLimitedOfferPurchase;
 import com.stockservice.dto.StockDetailResponse;
 import com.stockservice.dto.StockRankingResponse;
 import com.stockservice.dto.message.LimitedOfferPurchaseEvent;
@@ -9,7 +8,9 @@ import com.stockservice.dto.request.StockLimitedOfferPurchaseRequest;
 import com.stockservice.enums.LimitedOfferResult;
 import com.stockservice.fixture.StockFixture;
 import com.stockservice.messaging.StockProducer;
+import com.stockservice.repository.StockLimitedOfferPurchaseRepository;
 import com.stockservice.repository.StockRepository;
+import com.stockservice.repository.query.StockQueryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,12 +38,14 @@ class StockServiceTest {
 
     @Mock
     private StockRepository stockRepository;
-
     @Mock
     private StockRedisService stockRedisService;
-
     @Mock
     private StockProducer stockProducer;
+    @Mock
+    private StockQueryRepository stockQueryRepository;
+    @Mock
+    private StockLimitedOfferPurchaseRepository stockLimitedOfferPurchaseRepository;
 
     @Test
     @DisplayName("유효한 종목 ID로 상세 조회 시, 종목 정보를 정상적으로 반환한다.")
