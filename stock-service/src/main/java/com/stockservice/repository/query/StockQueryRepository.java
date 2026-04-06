@@ -32,6 +32,7 @@ public class StockQueryRepository {
                 .select(new QStockResponse(stock))
                 .from(stock)
                 .orderBy(orderSpecifiers)
+                .orderBy(stock.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
