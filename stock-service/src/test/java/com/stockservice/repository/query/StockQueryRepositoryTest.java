@@ -1,7 +1,7 @@
 package com.stockservice.repository.query;
 
 import com.stockservice.config.TestQuerydslConfig;
-import com.stockservice.dto.StockResponse;
+import com.stockservice.dto.response.StockResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

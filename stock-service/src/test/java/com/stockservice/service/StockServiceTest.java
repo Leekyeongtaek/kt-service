@@ -1,8 +1,8 @@
 package com.stockservice.service;
 
 import com.stockservice.domain.Stock;
-import com.stockservice.dto.StockDetailResponse;
-import com.stockservice.dto.StockRankingResponse;
+import com.stockservice.dto.response.StockDetailResponse;
+import com.stockservice.dto.response.StockRankingResponse;
 import com.stockservice.dto.message.LimitedOfferPurchaseEvent;
 import com.stockservice.dto.request.StockLimitedOfferPurchaseRequest;
 import com.stockservice.enums.LimitedOfferResult;

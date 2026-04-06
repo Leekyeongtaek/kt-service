@@ -1,9 +1,7 @@
-package com.stockservice.dto;
+package com.stockservice.dto.response;
 
 import com.stockservice.domain.Stock;
-import com.stockservice.enums.MarketType;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 public class StockRankingResponse {

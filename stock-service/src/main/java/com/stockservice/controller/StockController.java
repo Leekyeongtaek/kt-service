@@ -1,9 +1,9 @@
 package com.stockservice.controller;
 
-import com.stockservice.dto.StockDetailResponse;
+import com.stockservice.dto.response.StockDetailResponse;
 import com.stockservice.dto.request.StockLimitedOfferPurchaseRequest;
-import com.stockservice.dto.StockRankingResponse;
-import com.stockservice.dto.StockResponse;
+import com.stockservice.dto.response.StockRankingResponse;
+import com.stockservice.dto.response.StockResponse;
 import com.stockservice.enums.LimitedOfferResult;
 import com.stockservice.service.StockService;
 import lombok.RequiredArgsConstructor;

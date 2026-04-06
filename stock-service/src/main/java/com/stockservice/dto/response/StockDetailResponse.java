@@ -1,4 +1,4 @@
-package com.stockservice.dto;
+package com.stockservice.dto.response;
 
 import com.stockservice.domain.Stock;
 import com.stockservice.enums.Department;

@@ -1,4 +1,4 @@
-package com.stockservice.dto;
+package com.stockservice.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.stockservice.domain.Stock;
