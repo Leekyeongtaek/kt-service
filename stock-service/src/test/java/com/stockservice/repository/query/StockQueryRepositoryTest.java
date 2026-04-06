@@ -16,13 +16,19 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//todo 페이징과 정렬의 결합 테스트 추가
 @DataJpaTest
 @Import({StockQueryRepository.class, TestQuerydslConfig.class})
+// 각각의 @Test 메서드가 실행되기 직전마다 스크립트를 실행
 @Sql(scripts = "/stock-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class StockQueryRepositoryTest {
 
     @Autowired
     private StockQueryRepository stockQueryRepository;
+
+    private static final int TOTAL_STOCK_COUNT = 12;
+    private static final int DEFAULT_PAGE_NUMBER = 0;
+    private static final int DEFAULT_PAGE_SIZE = 12;
 
     @Test
     @DisplayName("조건 없는 목록 조회 시, ID 기준 내침차순으로 정렬되어 반환된다")
@@ -145,7 +151,7 @@ class StockQueryRepositoryTest {
 
     private void assertStockSingleSortOrder(String property, Sort.Direction direction, Long... expectedIds) {
         //when
-        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(0, 12, Sort.by(direction, property)));
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, Sort.by(direction, property)));
 
         //then
         assertThat(result.getContent())
@@ -177,11 +183,11 @@ class StockQueryRepositoryTest {
                 .and(Sort.by(Sort.Direction.DESC, "listedShares"));
 
         //when
-        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(0, 12, sort));
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, sort));
 
         //then
         List<StockResponse> content = result.getContent();
-        assertThat(content).hasSize(12);
+        assertThat(content).hasSize(TOTAL_STOCK_COUNT);
 
         assertThat(content)
                 .extracting(StockResponse::getId)
