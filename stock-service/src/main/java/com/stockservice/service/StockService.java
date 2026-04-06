@@ -4,6 +4,7 @@ import com.stockservice.domain.Stock;
 import com.stockservice.domain.StockLimitedOffer;
 import com.stockservice.dto.message.LimitedOfferPurchaseEvent;
 import com.stockservice.dto.request.StockLimitedOfferPurchaseRequest;
+import com.stockservice.dto.request.StockSearchCondition;
 import com.stockservice.dto.response.StockDetailResponse;
 import com.stockservice.dto.response.StockRankingResponse;
 import com.stockservice.dto.response.StockResponse;
@@ -37,8 +38,8 @@ public class StockService {
     private final StockLimitedOfferRepository stockLimitedOfferRepository;
     private final StockProducer stockProducer;
 
-    public Page<StockResponse> searchStock(Pageable pageable) {
-        return stockQueryRepository.searchStock(pageable);
+    public Page<StockResponse> searchStock(Pageable pageable, StockSearchCondition condition) {
+        return stockQueryRepository.searchStock(pageable, condition);
     }
 
     public StockDetailResponse getStockDetail(Long stockId) {

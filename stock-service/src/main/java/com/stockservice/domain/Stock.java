@@ -2,6 +2,7 @@ package com.stockservice.domain;
 
 import com.stockservice.enums.Department;
 import com.stockservice.enums.MarketType;
+import com.stockservice.enums.SecuritiesType;
 import com.stockservice.enums.StockType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -29,7 +30,8 @@ public class Stock {
     private LocalDate listedDate;
     @Enumerated(EnumType.STRING)
     private MarketType marketType;
-    private String securitiesType;
+    @Enumerated(EnumType.STRING)
+    private SecuritiesType securitiesType;
     @Enumerated(EnumType.STRING)
     private Department department;
     @Enumerated(EnumType.STRING)
@@ -38,7 +40,7 @@ public class Stock {
     private long listedShares;
 
     @Builder
-    public Stock(Long id, String standardCode, String shortCode, String korName, String korAbbrName, String engName, LocalDate listedDate, MarketType marketType, String securitiesType, Department department, StockType stockType, int faceValue, long listedShares) {
+    public Stock(Long id, String standardCode, String shortCode, String korName, String korAbbrName, String engName, LocalDate listedDate, MarketType marketType, SecuritiesType securitiesType, Department department, StockType stockType, int faceValue, long listedShares) {
         this.id = id;
         this.standardCode = standardCode;
         this.shortCode = shortCode;

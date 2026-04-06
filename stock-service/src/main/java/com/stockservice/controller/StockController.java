@@ -1,7 +1,8 @@
 package com.stockservice.controller;
 
-import com.stockservice.dto.response.StockDetailResponse;
 import com.stockservice.dto.request.StockLimitedOfferPurchaseRequest;
+import com.stockservice.dto.request.StockSearchCondition;
+import com.stockservice.dto.response.StockDetailResponse;
 import com.stockservice.dto.response.StockRankingResponse;
 import com.stockservice.dto.response.StockResponse;
 import com.stockservice.enums.LimitedOfferResult;
@@ -26,8 +27,9 @@ public class StockController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<StockResponse>> getStocks(
-            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<StockResponse> stockResponses = stockService.searchStock(pageable);
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+            @ModelAttribute StockSearchCondition condition) {
+        Page<StockResponse> stockResponses = stockService.searchStock(pageable, condition);
         return new ResponseEntity<>(stockResponses, HttpStatus.OK);
     }
 

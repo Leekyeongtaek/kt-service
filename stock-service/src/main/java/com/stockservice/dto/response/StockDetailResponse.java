@@ -3,6 +3,7 @@ package com.stockservice.dto.response;
 import com.stockservice.domain.Stock;
 import com.stockservice.enums.Department;
 import com.stockservice.enums.MarketType;
+import com.stockservice.enums.SecuritiesType;
 import com.stockservice.enums.StockType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,8 @@ public class StockDetailResponse {
     private LocalDate listedDate;
     private MarketType marketType;
     private String marketTypeName;
-    private String securitiesType;
+    private SecuritiesType securitiesType;
+    private String securitiesTypeDescription;
     private Department department;
     private String departmentName;
     private StockType stockType;
@@ -42,6 +44,7 @@ public class StockDetailResponse {
         this.marketType = stock.getMarketType();
         this.marketTypeName = stock.getMarketType().getMarketTypeName();
         this.securitiesType = stock.getSecuritiesType();
+        this.securitiesTypeDescription = stock.getSecuritiesType().getDescription();
         this.department = stock.getDepartment();
         this.departmentName = Optional.ofNullable(stock.getDepartment())
                 .map(Department::getDepartmentName)

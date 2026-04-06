@@ -1,7 +1,12 @@
 package com.stockservice.repository.query;
 
 import com.stockservice.config.TestQuerydslConfig;
+import com.stockservice.dto.request.StockSearchCondition;
 import com.stockservice.dto.response.StockResponse;
+import com.stockservice.enums.Department;
+import com.stockservice.enums.MarketType;
+import com.stockservice.enums.SecuritiesType;
+import com.stockservice.enums.StockType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +44,7 @@ class StockQueryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
         // when
-        Page<StockResponse> result = stockQueryRepository.searchStock(pageRequest);
+        Page<StockResponse> result = stockQueryRepository.searchStock(pageRequest, new StockSearchCondition());
 
         // then
         assertThat(result.getTotalElements()).isEqualTo(12);
@@ -151,7 +156,7 @@ class StockQueryRepositoryTest {
 
     private void assertStockSingleSortOrder(String property, Sort.Direction direction, Long... expectedIds) {
         //when
-        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, Sort.by(direction, property)));
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, Sort.by(direction, property)), new StockSearchCondition());
 
         //then
         assertThat(result.getContent())
@@ -183,7 +188,7 @@ class StockQueryRepositoryTest {
                 .and(Sort.by(Sort.Direction.DESC, "listedShares"));
 
         //when
-        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, sort));
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, sort), new StockSearchCondition());
 
         //then
         List<StockResponse> content = result.getContent();
@@ -192,5 +197,93 @@ class StockQueryRepositoryTest {
         assertThat(content)
                 .extracting(StockResponse::getId)
                 .containsExactly(2L, 6L, 12L, 10L, 9L, 8L, 7L, 11L, 3L, 5L, 4L, 1L);
+    }
+
+    /*
+    * * 필터 조건 대상
+    *   ID  시장구분          증권구분                      소속부           주식종류          한글 종목약명
+        2   KOSDAQ          STOCK                       MID_TIER       COMMON          덕양에너젠
+        6   KOSDAQ          INVESTMENT_COMPANY          BLUE_CHIP      COMMON          테라뷰
+        12  KOSDAQ          INFRASTRUCTURE_INVESTMENT   MID_TIER       COMMON          줌인터넷
+        10  KOSDAQ          REIT                        MID_TIER       COMMON          에브리봇
+        9   KONEX           STOCK                       MID_TIER       COMMON          진코스텍
+        8   KOSDAQ          STOCK                       BLUE_CHIP      COMMON          힘스
+        7   KOSDAQ          DEPOSITORY_RECEIPT          MID_TIER       COMMON          3S
+        11  KOSDAQ_GLOBAL   FOREIGN_STOCK               BLUE_CHIP      COMMON          포스코엠텍
+        3   KOSPI           STOCK                       (NULL)         NEW_PREFERRED   CJ씨푸드1우
+        5   KOSPI           STOCK                       (NULL)         COMMON          동화약품
+        4   KOSPI           STOCK                       (NULL)         COMMON          삼성전자
+        1   KOSPI           STOCK                       (NULL)         COMMON          경방
+    * */
+    @Test
+    @DisplayName("필터 조건이 없으면, 전체 종목을 조회한다")
+    void search_no_filter() {
+        //given
+        StockSearchCondition condition = new StockSearchCondition();
+
+        //when
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE), condition);
+
+        //then
+        List<StockResponse> content = result.getContent();
+        assertThat(content).hasSize(TOTAL_STOCK_COUNT);
+    }
+
+    @Test
+    @DisplayName("KOSPI 필터 조건으로 검색 시, 시장구분이 코스피인 목록을 반환한다.")
+    void search_single_filter() {
+        //given
+        StockSearchCondition condition = StockSearchCondition.builder()
+                .marketType(MarketType.KOSPI)
+                .build();
+
+        //when
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE), condition);
+
+        //then
+        List<StockResponse> content = result.getContent();
+        assertThat(content).hasSize(4);
+    }
+
+    @Test
+    @DisplayName("코스닥, 주권, 중견기업부, 보통주 필터 조건 시, 해당 되는 종목을 반환한다.")
+    void search_multi_filter() {
+        //given
+        StockSearchCondition condition = StockSearchCondition.builder()
+                .marketType(MarketType.KOSDAQ)
+                .securitiesType(SecuritiesType.STOCK)
+                .department(Department.MID_TIER)
+                .stockType(StockType.COMMON)
+                .build();
+
+        //when
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE), condition);
+
+        //then
+        List<StockResponse> content = result.getContent();
+        assertThat(content).hasSize(1);
+        assertThat(content.get(0).getId()).isEqualTo(2L);
+        assertThat(content.get(0).getMarketType()).isEqualTo(MarketType.KOSDAQ);
+        assertThat(content.get(0).getSecuritiesType()).isEqualTo(SecuritiesType.STOCK);
+        assertThat(content.get(0).getDepartment()).isEqualTo(Department.MID_TIER);
+        assertThat(content.get(0).getStockType()).isEqualTo(StockType.COMMON);
+    }
+
+    @Test
+    @DisplayName("조건을 만족하는 데이터가 없므면, 빈 목록을 반환한다.")
+    void search_no_result_filter() {
+        //given
+        StockSearchCondition condition = StockSearchCondition.builder()
+                .marketType(MarketType.KOSDAQ)
+                .securitiesType(SecuritiesType.FOREIGN_STOCK)
+                .stockType(StockType.NEW_PREFERRED)
+                .build();
+
+        //when
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE), condition);
+
+        //then
+        List<StockResponse> content = result.getContent();
+        assertThat(content).isEmpty();
     }
 }
