@@ -41,7 +41,8 @@ public class StockQueryRepository {
                         eqMarketType(condition.getMarketType()),
                         eqStockType(condition.getStockType()),
                         eqSecuritiesType(condition.getSecuritiesType()),
-                        eqDepartment(condition.getDepartment())
+                        eqDepartment(condition.getDepartment()),
+                        containsKeyword(condition.getKeyword())
                 )
                 .orderBy(orderSpecifiers)
                 .orderBy(stock.id.desc())
@@ -51,6 +52,13 @@ public class StockQueryRepository {
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(stock.count())
+                .where(
+                        eqMarketType(condition.getMarketType()),
+                        eqStockType(condition.getStockType()),
+                        eqSecuritiesType(condition.getSecuritiesType()),
+                        eqDepartment(condition.getDepartment()),
+                        containsKeyword(condition.getKeyword())
+                )
                 .from(stock);
 
         return PageableExecutionUtils.getPage(stocks, pageable, countQuery::fetchOne);
@@ -70,5 +78,16 @@ public class StockQueryRepository {
 
     private BooleanExpression eqSecuritiesType(SecuritiesType securitiesType) {
         return securitiesType != null ? stock.securitiesType.eq(securitiesType) : null;
+    }
+
+    private BooleanExpression containsKeyword(String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return null;
+        }
+
+        return stock.shortCode.contains(keyword)
+                .or(stock.korName.contains(keyword))
+                .or(stock.korAbbrName.contains(keyword))
+                .or(stock.engName.contains(keyword));
     }
 }

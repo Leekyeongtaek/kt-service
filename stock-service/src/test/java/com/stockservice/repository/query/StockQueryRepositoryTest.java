@@ -286,4 +286,139 @@ class StockQueryRepositoryTest {
         List<StockResponse> content = result.getContent();
         assertThat(content).isEmpty();
     }
+
+    /*
+    * ID 10, 단축코드: 270660 (에브리봇 주식회사)
+    * */
+    @Test
+    @DisplayName("통합 검색어에 단축코드 입력 시, 부분일치 하는 종목을 반환한다.")
+    void search_keyword_shotCode() {
+        //given
+        String keyword = "270660";
+        StockSearchCondition condition = StockSearchCondition.builder()
+                .keyword(keyword)
+                .build();
+
+        //when
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE), condition);
+
+        //then
+        List<StockResponse> content = result.getContent();
+        assertThat(content).hasSize(1);
+        assertThat(content.get(0).getShortCode()).contains("270660");
+    }
+
+    /*
+    * ID 2, 한글종목: 덕양에너젠
+    * */
+    @Test
+    @DisplayName("통합 검색어에 한글종목명을 입력 시, 부분 일치하는 종목을 반환한다.")
+    void search_keyword_korName() {
+        //given
+        String keyword = "덕양에너젠";
+        StockSearchCondition condition = StockSearchCondition.builder()
+                .keyword(keyword)
+                .build();
+
+        //when
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE), condition);
+
+        //then
+        List<StockResponse> content = result.getContent();
+        assertThat(content).hasSize(1);
+        assertThat(content.get(0).getKorName()).contains("덕양에너젠");
+    }
+
+    /*
+    * ID 5, 한글종목명: 동화약품
+    * */
+    @Test
+    @DisplayName("통합 검색어에 한글종목약명을 입력 시, 부분 일치하는 종목을 반환한다.")
+    void search_keyword_korAbbrName() {
+        //given
+        String keyword = "동화약품";
+        StockSearchCondition condition = StockSearchCondition.builder()
+                .keyword(keyword)
+                .build();
+
+        //when
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE), condition);
+
+        //then
+        List<StockResponse> content = result.getContent();
+        assertThat(content).hasSize(1);
+        assertThat(content.get(0).getKorAbbrName()).contains("동화약품");
+    }
+
+    /*
+    * ID 9, 영문종목명: JINCOSTECH
+    * */
+    @Test
+    @DisplayName("통합 검색어에 영문종목명을 입력 시, 부분 일치하는 종목을 반환한다.")
+    void search_keyword_engName() {
+        //given
+        String keyword = "JINCOSTECH";
+        StockSearchCondition condition = StockSearchCondition.builder()
+                .keyword(keyword)
+                .build();
+
+        //when
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE), condition);
+
+        //then
+        List<StockResponse> content = result.getContent();
+        assertThat(content).hasSize(1);
+        assertThat(content.get(0).getEngName()).isEqualTo("JINCOSTECH");
+    }
+
+    @Test
+    @DisplayName("통합 검색어에 키워드가 모두 null인 경우 전체 목록을 반환한다.")
+    void search_keyword_null_return_all() {
+        //given
+        StockSearchCondition condition = StockSearchCondition.builder()
+                .build();
+
+        //when
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE), condition);
+
+        //then
+        List<StockResponse> content = result.getContent();
+        assertThat(content).hasSize(TOTAL_STOCK_COUNT);
+    }
+
+    @Test
+    @DisplayName("통합 검색어에 일치하는 결과가 없으면, 빈 목록을 반환한다.")
+    void search_keyword_no_result() {
+        //given
+        String korName = "더미 종목";
+        StockSearchCondition condition = StockSearchCondition.builder()
+                .keyword(korName)
+                .build();
+
+        //when
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE), condition);
+
+        //then
+        List<StockResponse> content = result.getContent();
+        assertThat(content).isEmpty();
+    }
+
+    /*
+    * ID 10, 한글종목약명: 에브리봇, 마켓타입: KOSDAQ
+    * */
+    @Test
+    @DisplayName("키워드와 필터 조건 동시 적용 시, 두 조건을 모두 만족하는 종목만 반환한다.")
+    void search_complex_keyword_and_filter() {
+        //given
+        StockSearchCondition condition = StockSearchCondition.builder()
+                .keyword("에브리봇")
+                .marketType(MarketType.KOSPI)
+                .build();
+
+        //when
+        Page<StockResponse> result = stockQueryRepository.searchStock(PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE), condition);
+
+        //then
+        assertThat(result.getContent()).isEmpty();
+    }
 }

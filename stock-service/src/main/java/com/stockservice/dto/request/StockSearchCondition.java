@@ -14,14 +14,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class StockSearchCondition {
 
-    //검색어 필드
+    private String keyword;
     private MarketType marketType; // 시장구분
     private StockType stockType; // 주식 종류
     private Department department; // 소속부
     private SecuritiesType securitiesType; // 증권구분
 
     @Builder
-    public StockSearchCondition(MarketType marketType, StockType stockType, Department department, SecuritiesType securitiesType) {
+    public StockSearchCondition(String keyword, MarketType marketType, StockType stockType, Department department, SecuritiesType securitiesType) {
+        this.keyword = keyword;
         this.marketType = marketType;
         this.stockType = stockType;
         this.department = department;
