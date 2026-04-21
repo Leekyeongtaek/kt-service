@@ -6,7 +6,7 @@
 * 단위 테스트, 통합 테스트 작성
 * 로컬 환경에서 CI/CD 파이프라인 구현
 * 강의나 책을 통해 학습한 내용은 요구사항 정의 -> 구현 단계를 통한 실전 학습 파이프라인 환경 구성
-* <a href="https://mrlee-gamestore.com/" target="_blank" rel="noopener noreferrer"> 운영서버 바로가기 </a>
+* <a href="https://kt-frontend-9d1v.vercel.app/" target="_blank" rel="noopener noreferrer"> 운영서버 바로가기 </a>
 
 ## 2. 기술 스택
 * 백엔드: Java 17, Spring Boot 3.5, Spring Data JPA
